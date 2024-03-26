@@ -4,28 +4,28 @@ Imports System.ComponentModel
 Imports System.Drawing
 
 <ToolboxItem(False)>
-Public Class Finish
+Public Class PageCustom
 
     Inherits WizardPage
 
-    Private styleField As WizardPageStyle = WizardPageStyle.Finish
+    Private styleField As PageStyle = PageStyle.Custom
 
-    <DefaultValue(WizardPageStyle.Finish)>
+    <DefaultValue(PageStyle.Custom)>
     <Category("Wizard")>
     <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
-    Public Overrides Property Style As WizardPageStyle
+    Public Overrides Property Style As PageStyle
         Get
             Return Me.styleField
         End Get
-        Set(value As WizardPageStyle)
+        Set(value As PageStyle)
             Me.styleField = value
         End Set
     End Property
 
     Private Sub InitializeComponent()
-        MyBase.SuspendLayout()
+        Me.SuspendLayout()
         Me.BackColor = SystemColors.ControlDarkDark
-        MyBase.ResumeLayout(False)
+        Me.ResumeLayout(False)
     End Sub
 
 End Class

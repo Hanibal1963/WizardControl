@@ -1,9 +1,15 @@
-﻿
+﻿' ****************************************************************************************************************
+' WizardDesigner.vb
+' © 2024 by Andreas Sauer
+' ****************************************************************************************************************
+'
+
 Imports System.ComponentModel.Design
 Imports System.Drawing
 Imports System.Windows.Forms
 Imports System.Windows.Forms.Design
 
+''' <summary>Designer für dieses Control</summary>
 Friend Class WizardDesigner
 
     Inherits ParentControlDesigner

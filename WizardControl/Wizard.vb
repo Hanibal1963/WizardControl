@@ -1,4 +1,9 @@
-﻿
+﻿' ****************************************************************************************************************
+' Wizard.vb
+' © 2024 by Andreas Sauer
+' ****************************************************************************************************************
+'
+
 Imports System
 Imports System.ComponentModel
 Imports System.ComponentModel.Design
@@ -23,7 +28,7 @@ Public Class Wizard
     Private ReadOnly offsetNext As Point = New Point(164, 36)
     Private ReadOnly offsetBack As Point = New Point(244, 36)
     Private selectedPageField As WizardPage = Nothing
-    Private ReadOnly pagesField As WizardPagesCollection = Nothing
+    Private ReadOnly pagesField As PagesCollection = Nothing
 
     Public Delegate Sub BeforeSwitchPagesEventHandler(sender As Object, e As BeforeSwitchPagesEventArgs)
     Public Delegate Sub AfterSwitchPagesEventHandler(sender As Object, e As AfterSwitchPagesEventArgs)
@@ -77,7 +82,7 @@ Public Class Wizard
     <Category("Wizard")>
     <Description("Ruft die Auflistung der Assistentenseiten in diesem Registerkartensteuerelement ab.")>
     <Editor(GetType(PagesCellectionEditor), GetType(UITypeEditor))>
-    Public ReadOnly Property Pages As WizardPagesCollection
+    Public ReadOnly Property Pages As PagesCollection
         Get
             Return Me.pagesField
         End Get
@@ -98,6 +103,7 @@ Public Class Wizard
         End Set
     End Property
 
+    <Browsable(True)>
     <Category("Wizard")>
     <Description("Ruft das auf den Begrüßungs- und Abschlussseiten angezeigte Bild ab oder legt es fest.")>
     Public Property ImageWelcome As Image
@@ -112,9 +118,9 @@ Public Class Wizard
         End Set
     End Property
 
-    <DefaultValue(DockStyle.Fill)>
     <Category("Layout")>
     <Description("Ruft ab oder legt fest, an welcher Kante des übergeordneten Containers ein Steuerelement angedockt ist.")>
+    <DefaultValue(DockStyle.Fill)>
     Public Overloads Property Dock As DockStyle
         Get
             Return MyBase.Dock
@@ -292,7 +298,7 @@ Public Class Wizard
         Me.InitializeComponent()
         Me.InitializeStyles()
         MyBase.Dock = DockStyle.Fill
-        Me.pagesField = New WizardPagesCollection(Me)
+        Me.pagesField = New PagesCollection(Me)
 
     End Sub
 
@@ -364,7 +370,7 @@ Public Class Wizard
                 Me.Container.Add(Me.selectedPageField)
             End If
 
-            If Me.selectedPageField.Style = WizardPageStyle.Finish Then
+            If Me.selectedPageField.Style = PageStyle.Finish Then
                 Me.ButtonCancel.Text = "OK"
                 Me.ButtonCancel.DialogResult = DialogResult.OK
             Else
@@ -372,7 +378,7 @@ Public Class Wizard
                 Me.ButtonCancel.DialogResult = DialogResult.Cancel
             End If
 
-            If Me.selectedPageField.Style = WizardPageStyle.Custom And Me.selectedPageField Is Me.pagesField(Me.pagesField.Count - 1) Then
+            If Me.selectedPageField.Style = PageStyle.Custom And Me.selectedPageField Is Me.pagesField(Me.pagesField.Count - 1) Then
                 Me.ButtonCancel.Text = "OK"
                 Me.ButtonCancel.DialogResult = DialogResult.OK
             End If
@@ -459,13 +465,16 @@ Public Class Wizard
     End Sub
 
     Protected Overrides Sub OnLoad(e As EventArgs)
+
         MyBase.OnLoad(e)
         If Me.pagesField.Count > 0 Then
             Me.ActivatePage(0)
         End If
+
     End Sub
 
     Protected Overrides Sub OnResize(e As EventArgs)
+
         MyBase.OnResize(e)
         If Me.selectedPageField IsNot Nothing Then
             Me.selectedPageField.SetBounds(0, 0, Me.Width, Me.Height - 48)
@@ -475,14 +484,17 @@ Public Class Wizard
         Me.ButtonNext.Location = New Point(Me.Width - Me.offsetNext.X, Me.Height - Me.offsetNext.Y)
         Me.ButtonCancel.Location = New Point(Me.Width - Me.offsetCancel.X, Me.Height - Me.offsetCancel.Y)
         MyBase.Refresh()
+
     End Sub
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
+
         MyBase.OnPaint(e)
         Dim clientRectangle = MyBase.ClientRectangle
         clientRectangle.Y = Me.Height - 48
         clientRectangle.Height = 48
         ControlPaint.DrawBorder3D(e.Graphics, clientRectangle, Border3DStyle.Etched, Border3DSide.Top)
+
     End Sub
 
     Protected Overrides Sub OnControlAdded(e As ControlEventArgs)
@@ -501,11 +513,11 @@ Public Class Wizard
         ButtonNext.Click, ButtonBack.Click, ButtonCancel.Click
 
         Select Case True
+
             Case sender Is Me.ButtonNext : Me.Next()
             Case sender Is Me.ButtonBack : Me.Back()
             Case sender Is Me.ButtonHelp : Me.OnHelp(EventArgs.Empty)
             Case sender Is Me.ButtonCancel
-
                 If Me.ButtonCancel.DialogResult = DialogResult.Cancel Then
                     Me.OnCancel(New CancelEventArgs())
                 ElseIf Me.ButtonCancel.DialogResult = DialogResult.OK Then
@@ -514,9 +526,6 @@ Public Class Wizard
 
         End Select
 
-    End Sub
-
-    Private Sub ButtonCancel_VisibleChanged(sender As Object, e As EventArgs)
     End Sub
 
 End Class

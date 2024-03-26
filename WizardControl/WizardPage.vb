@@ -1,10 +1,16 @@
-﻿
+﻿' ****************************************************************************************************************
+' WizardPage.vb
+' © 2024 by Andreas Sauer
+' ****************************************************************************************************************
+'
+
 Imports System
 Imports System.ComponentModel
 Imports System.Drawing
 Imports System.Windows.Forms
 Imports System.Windows.Forms.Design
 
+''' <summary>Definiert eine Seite des Controls</summary>
 <ToolboxItem(False)>
 Public Class WizardPage
 
@@ -15,17 +21,17 @@ Public Class WizardPage
     Private Const HEADER_TEXT_PADDING As Integer = 8
     Private Const WELCOME_GLYPH_WIDTH As Integer = 164
 
-    Private styleField As WizardPageStyle = WizardPageStyle.Standard
+    Private styleField As PageStyle = PageStyle.Standard
     Private titleField As String = String.Empty
     Private descriptionField As String = String.Empty
 
     <Category("Wizard")>
     <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
-    Public Overridable Property Style As WizardPageStyle
+    Public Overridable Property Style As PageStyle
         Get
             Return Me.styleField
         End Get
-        Set(value As WizardPageStyle)
+        Set(value As PageStyle)
             If Me.styleField = value Then
                 Return
             End If
@@ -90,7 +96,7 @@ Public Class WizardPage
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
-        If Me.styleField = WizardPageStyle.Custom Then
+        If Me.styleField = PageStyle.Custom Then
             Return
         End If
         Dim clientRectangle = MyBase.ClientRectangle
@@ -102,7 +108,7 @@ Public Class WizardPage
         genericDefault.Alignment = StringAlignment.Near
         genericDefault.Trimming = StringTrimming.EllipsisCharacter
         Select Case Me.Style
-            Case WizardPageStyle.Standard
+            Case PageStyle.Standard
                 clientRectangle.Height = 64
                 ControlPaint.DrawBorder3D(e.Graphics, clientRectangle, Border3DStyle.Etched, Border3DSide.Bottom)
                 clientRectangle.Height -= SystemInformation.Border3DSize.Height
@@ -136,7 +142,7 @@ Public Class WizardPage
                 e.Graphics.DrawString(Me.titleField, font4, SystemBrushes.WindowText, empty2, genericDefault)
                 e.Graphics.DrawString(Me.descriptionField, font3, SystemBrushes.WindowText, empty3, genericDefault)
                 Exit Select
-            Case WizardPageStyle.Welcome, WizardPageStyle.Finish
+            Case PageStyle.Welcome, PageStyle.Finish
                 e.Graphics.FillRectangle(SystemBrushes.Window, clientRectangle)
                 empty.Location = Point.Empty
                 empty.Size = New Size(164, Me.Height)

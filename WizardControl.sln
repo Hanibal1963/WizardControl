@@ -7,6 +7,11 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "WizardControlDemo", "Wizard
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "WizardControl", "WizardControl\WizardControl.vbproj", "{71F2DF9C-93B9-422C-857D-FCE97DD17955}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{E9400BED-8DA6-4C96-B8AE-9C45B31418FC}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

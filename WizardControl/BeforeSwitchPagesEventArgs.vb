@@ -1,4 +1,9 @@
-﻿
+﻿' ****************************************************************************************************************
+' BeforeSwitchPagesEventArgs.vb
+' © 2024 by Andreas Sauer
+' ****************************************************************************************************************
+'
+
 Public Class BeforeSwitchPagesEventArgs
 
     Inherits AfterSwitchPagesEventArgs

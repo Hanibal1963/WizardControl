@@ -55,6 +55,7 @@
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -62,10 +63,10 @@
   <ItemGroup>
     <Compile Include="AfterSwitchPagesEventArgs.vb" />
     <Compile Include="BeforeSwitchPagesEventArgs.vb" />
-    <Compile Include="Custom.vb">
+    <Compile Include="PageCustom.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Finish.vb">
+    <Compile Include="PageFinish.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -76,11 +77,11 @@
     </Compile>
     <Compile Include="PagesCellectionEditor.vb" />
     <Compile Include="ProvideToolboxControlAttribute.vb" />
-    <Compile Include="Standard.vb">
+    <Compile Include="PageStandard.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="VariableDefinitions.vb" />
-    <Compile Include="Welcome.vb">
+    <Compile Include="PageWelcome.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Wizard.Designer.vb">
@@ -93,9 +94,9 @@
     <Compile Include="WizardPage.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WizardPageDesigner.vb" />
-    <Compile Include="WizardPagesCollection.vb" />
-    <Compile Include="WizardPageStyle.vb" />
+    <Compile Include="PageDesigner.vb" />
+    <Compile Include="PagesCollection.vb" />
+    <Compile Include="PageStyle.vb" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.9.37000" ExcludeAssets="runtime">

@@ -1,7 +1,12 @@
-﻿
+﻿' ****************************************************************************************************************
+' PagesCollection.vb
+' © 2024 by Andreas Sauer
+' ****************************************************************************************************************
+'
+
 Imports System.Collections
 
-Public Class WizardPagesCollection
+Public Class PagesCollection
 
     Inherits CollectionBase
 
