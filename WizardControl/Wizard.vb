@@ -370,8 +370,14 @@ Public Class Wizard
                 Me.Container.Add(Me.selectedPageField)
             End If
 
+
+            '---------------------------------------------------
+
+            'TODO: Hier auf die verschiedenen Sprachen reagieren
+
+
             If Me.selectedPageField.Style = PageStyle.Finish Then
-                Me.ButtonCancel.Text = "OK"
+                Me.ButtonCancel.Text = "Fertigstellen"
                 Me.ButtonCancel.DialogResult = DialogResult.OK
             Else
                 Me.ButtonCancel.Text = "Abbruch"
@@ -382,6 +388,9 @@ Public Class Wizard
                 Me.ButtonCancel.Text = "OK"
                 Me.ButtonCancel.DialogResult = DialogResult.OK
             End If
+
+            '----------------------------------------------------
+
 
             Me.selectedPageField.SetBounds(0, 0, Me.Width, Me.Height - 48)
             Me.selectedPageField.Visible = True
