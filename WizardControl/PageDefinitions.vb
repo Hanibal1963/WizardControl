@@ -1,14 +1,26 @@
 ﻿' ****************************************************************************************************************
-' WizardPage.vb
+' PageDefinitions.vb
 ' © 2024 by Andreas Sauer
 ' ****************************************************************************************************************
 '
 
 Imports System
+Imports System.Collections
+Imports System.Collections.Generic
 Imports System.ComponentModel
+Imports System.ComponentModel.Design
 Imports System.Drawing
 Imports System.Windows.Forms
-Imports System.Windows.Forms.Design
+
+''' <summary>Auflistung der verfügbaren Seitenstile</summary>
+Public Enum PageStyle
+
+    Standard = 0
+    Welcome = 1
+    Finish = 2
+    Custom = 3
+
+End Enum
 
 ''' <summary>Definiert eine Seite des Controls</summary>
 <ToolboxItem(False)>
@@ -175,6 +187,200 @@ Public Class WizardPage
     Private Sub InitializeComponent()
         Me.SuspendLayout()
         Me.ResumeLayout(False)
+    End Sub
+
+End Class
+
+''' <summary>Definiert die Abschlußseite</summary>
+<ToolboxItem(False)>
+Public Class PageFinish
+
+    Inherits WizardPage
+
+    Private styleField As PageStyle = PageStyle.Finish
+
+    <DefaultValue(PageStyle.Finish)>
+    <Category("Wizard")>
+    <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
+    Public Overrides Property Style As PageStyle
+        Get
+            Return Me.styleField
+        End Get
+        Set(value As PageStyle)
+            Me.styleField = value
+        End Set
+    End Property
+
+    Private Sub InitializeComponent()
+        Me.SuspendLayout()
+        Me.BackColor = SystemColors.ControlDarkDark
+        Me.ResumeLayout(False)
+    End Sub
+
+End Class
+
+''' <summary>Definiert eine Benutzerdefinierte Seite</summary>
+<ToolboxItem(False)>
+Public Class PageCustom
+
+    Inherits WizardPage
+
+    Private styleField As PageStyle = PageStyle.Custom
+
+    <DefaultValue(PageStyle.Custom)>
+    <Category("Wizard")>
+    <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
+    Public Overrides Property Style As PageStyle
+        Get
+            Return Me.styleField
+        End Get
+        Set(value As PageStyle)
+            Me.styleField = value
+        End Set
+    End Property
+
+    Private Sub InitializeComponent()
+        Me.SuspendLayout()
+        Me.BackColor = SystemColors.ControlDarkDark
+        Me.ResumeLayout(False)
+    End Sub
+
+End Class
+
+''' <summary>Definiert eine Standardseite</summary>
+<ToolboxItem(False)>
+Public Class PageStandard
+
+    Inherits WizardPage
+
+    Private styleField As PageStyle = PageStyle.Standard
+
+    <DefaultValue(PageStyle.Standard)>
+    <Category("Wizard")>
+    <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
+    Public Overrides Property Style As PageStyle
+        Get
+            Return Me.styleField
+        End Get
+        Set(value As PageStyle)
+            Me.styleField = value
+        End Set
+    End Property
+
+    Private Sub InitializeComponent()
+        Me.SuspendLayout()
+        Me.BackColor = SystemColors.ControlDarkDark
+        Me.ResumeLayout(False)
+    End Sub
+
+End Class
+
+''' <summary>Definiert die Willkommenseite</summary>
+<ToolboxItem(False)>
+Public Class PageWelcome
+
+    Inherits WizardPage
+
+    Private styleField As PageStyle = PageStyle.Welcome
+
+    <DefaultValue(PageStyle.Welcome)>
+    <Category("Wizard")>
+    <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
+    Public Overrides Property Style As PageStyle
+        Get
+            Return Me.styleField
+        End Get
+        Set(value As PageStyle)
+            Me.styleField = value
+        End Set
+    End Property
+
+    Private Sub InitializeComponent()
+        Me.SuspendLayout()
+        Me.BackColor = SystemColors.ControlDarkDark
+        Me.ResumeLayout(False)
+    End Sub
+
+End Class
+
+''' <summary>Dient zum anzeigen der Seitenstile im Seitendesigner</summary>
+Friend Class PagesCellectionEditor
+
+    Inherits CollectionEditor
+
+    Private Types As Type()
+
+    Public Sub New(type As Type)
+        MyBase.New(type)
+        Me.Types = New Type(3) {GetType(PageWelcome), GetType(PageStandard), GetType(PageCustom), GetType(PageFinish)}
+    End Sub
+
+    Protected Overrides Function CreateNewItemTypes() As Type()
+        Return Me.Types
+    End Function
+
+End Class
+
+''' <summary>Definiert die Auflistung der Seiten des Assistenten</summary>
+Public Class PagesCollection
+
+    Inherits CollectionBase
+
+    Private owner As Wizard = Nothing
+
+    Default Public Property Item(index As Integer) As WizardPage
+        Get
+            Return CType(List(index), WizardPage)
+        End Get
+        Set(value As WizardPage)
+            List(index) = value
+        End Set
+    End Property
+
+    Friend Sub New(owner As Wizard)
+        Me.owner = owner
+    End Sub
+
+    Public Function Add(value As WizardPage) As Integer
+        Return List.Add(value)
+    End Function
+
+    Public Sub AddRange(pages As WizardPage())
+        For Each value As WizardPage In pages
+            Me.Add(value)
+        Next
+    End Sub
+
+    Public Function IndexOf(value As WizardPage) As Integer
+        Return List.IndexOf(value)
+    End Function
+
+    Public Sub Insert(index As Integer, value As WizardPage)
+        List.Insert(index, value)
+    End Sub
+
+    Public Sub Remove(value As WizardPage)
+        List.Remove(value)
+    End Sub
+
+    Public Function Contains(value As WizardPage) As Boolean
+        Return List.Contains(value)
+    End Function
+
+    Protected Overrides Sub OnInsertComplete(index As Integer, value As Object)
+        MyBase.OnInsertComplete(index, value)
+        Me.owner.SelectedIndex = index
+    End Sub
+
+    Protected Overrides Sub OnRemoveComplete(index As Integer, value As Object)
+        MyBase.OnRemoveComplete(index, value)
+        If Me.owner.SelectedIndex = index Then
+            If index < InnerList.Count Then
+                Me.owner.SelectedIndex = index
+            Else
+                Me.owner.SelectedIndex = InnerList.Count - 1
+            End If
+        End If
     End Sub
 
 End Class

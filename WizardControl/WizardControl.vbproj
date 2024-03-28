@@ -61,12 +61,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AfterSwitchPagesEventArgs.vb" />
-    <Compile Include="BeforeSwitchPagesEventArgs.vb" />
-    <Compile Include="PageCustom.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="PageFinish.vb">
+    <Compile Include="DesignerDefinitions.vb" />
+    <Compile Include="EventArgsDefinitions.vb" />
+    <Compile Include="PageDefinitions.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -75,28 +72,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="PagesCellectionEditor.vb" />
     <Compile Include="ProvideToolboxControlAttribute.vb" />
-    <Compile Include="PageStandard.vb">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="VariableDefinitions.vb" />
-    <Compile Include="PageWelcome.vb">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Wizard.Designer.vb">
       <DependentUpon>Wizard.vb</DependentUpon>
     </Compile>
     <Compile Include="Wizard.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="WizardDesigner.vb" />
-    <Compile Include="WizardPage.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="PageDesigner.vb" />
-    <Compile Include="PagesCollection.vb" />
-    <Compile Include="PageStyle.vb" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.9.37000" ExcludeAssets="runtime">

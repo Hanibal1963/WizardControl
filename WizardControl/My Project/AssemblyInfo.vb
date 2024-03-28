@@ -7,11 +7,11 @@ Imports Microsoft.VisualBasic
 ' set of attributes. Change these attribute values to modify the information
 ' associated with an assembly.
 <Assembly: AssemblyTitle("WizardControl")>
-<Assembly: AssemblyDescription("Ein Steuerelement zum erstellen eines Assistenten.")>
+<Assembly: AssemblyDescription("Steuerelement zum erstellen eines Assistenten.")>
 <Assembly: AssemblyConfiguration("")>
-<Assembly: AssemblyCompany("")>
+<Assembly: AssemblyCompany("SchlumpfSoft")>
 <Assembly: AssemblyProduct("WizardControl")>
-<Assembly: AssemblyCopyright("")>
+<Assembly: AssemblyCopyright("© 2024 by Andreas Sauer")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 
