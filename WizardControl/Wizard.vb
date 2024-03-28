@@ -18,17 +18,9 @@ Imports System.Windows.Forms.Design
 <ToolboxItem(True)>
 <ToolboxBitmap(GetType(Wizard), "Wizard.bmp")>
 <Designer(GetType(WizardDesigner))>
-Public Class Wizard
+Public Class Wizard : Inherits UserControl
 
-    Inherits UserControl
-
-    Private Const FOOTER_AREA_HEIGHT As Integer = 48
-
-    Private ReadOnly offsetCancel As Point = New Point(84, 36)
-    Private ReadOnly offsetNext As Point = New Point(164, 36)
-    Private ReadOnly offsetBack As Point = New Point(244, 36)
-    Private selectedPageField As WizardPage = Nothing
-    Private ReadOnly pagesField As PagesCollection = Nothing
+    'Private Const FOOTER_AREA_HEIGHT As Integer = 48
 
     Public Delegate Sub BeforeSwitchPagesEventHandler(sender As Object, e As BeforeSwitchPagesEventArgs)
     Public Delegate Sub AfterSwitchPagesEventHandler(sender As Object, e As AfterSwitchPagesEventArgs)
@@ -81,10 +73,10 @@ Public Class Wizard
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Content)>
     <Category("Wizard")>
     <Description("Ruft die Auflistung der Assistentenseiten in diesem Registerkartensteuerelement ab.")>
-    <Editor(GetType(PagesCellectionEditor), GetType(UITypeEditor))>
+    <Editor(GetType(PagesCollectionEditor), GetType(UITypeEditor))>
     Public ReadOnly Property Pages As PagesCollection
         Get
-            Return Me.pagesField
+            Return _Pages
         End Get
     End Property
 
@@ -134,7 +126,7 @@ Public Class Wizard
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Public Property SelectedPage As WizardPage
         Get
-            Return Me.selectedPageField
+            Return _SelectedPage
         End Get
         Set(value As WizardPage)
             Me.ActivatePage(value)
@@ -145,15 +137,17 @@ Public Class Wizard
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Friend Property SelectedIndex As Integer
         Get
-            Return Me.pagesField.IndexOf(Me.selectedPageField)
+            Return _Pages.IndexOf(_SelectedPage)
         End Get
         Set(value As Integer)
-            If Me.pagesField.Count = 0 Then
+            If _Pages.Count = 0 Then
                 Me.ActivatePage(-1)
                 Return
             End If
-            If value < -1 OrElse value >= Me.pagesField.Count Then
-                Throw New ArgumentOutOfRangeException("SelectedIndex", value, "The page index must be between 0 and " & Convert.ToString(Me.pagesField.Count - 1))
+            If value < -1 OrElse value >= _Pages.Count Then
+                Throw New ArgumentOutOfRangeException(
+                    $"SelectedIndex", value,
+                    $"Der Seitenindex muss zwischen 0 und {_Pages.Count - 1} liegen ")
             End If
             Me.ActivatePage(value)
         End Set
@@ -163,10 +157,7 @@ Public Class Wizard
     <Description("Ruft die Schriftart ab, die zum Anzeigen der Beschreibung einer Standardseite verwendet wird, oder legt diese fest.")>
     Public Property HeaderFont As Font
         Get
-            If _HeaderFont Is Nothing Then
-                Return MyBase.Font
-            End If
-            Return _HeaderFont
+            Return If(_HeaderFont, MyBase.Font)
         End Get
         Set(value As Font)
             If _HeaderFont IsNot value Then
@@ -180,10 +171,12 @@ Public Class Wizard
     <Description("Ruft die Schriftart ab, die zum Anzeigen des Titels einer Standardseite verwendet wird, oder legt diese fest.")>
     Public Property HeaderTitleFont As Font
         Get
-            If _HeaderTitleFont Is Nothing Then
-                Return New Font(MyBase.Font.FontFamily, MyBase.Font.Size + 2.0F, FontStyle.Bold)
-            End If
-            Return _HeaderTitleFont
+            Return If(
+                _HeaderTitleFont,
+                New Font(
+                MyBase.Font.FontFamily,
+                MyBase.Font.Size + 2.0F,
+                FontStyle.Bold))
         End Get
         Set(value As Font)
             If _HeaderTitleFont IsNot value Then
@@ -197,10 +190,7 @@ Public Class Wizard
     <Description("Ruft die Schriftart ab, die zum Anzeigen der Beschreibung einer Begrüßungs- oder Abschlussseite verwendet wird, oder legt diese fest.")>
     Public Property WelcomeFont As Font
         Get
-            If _WelcomeFont Is Nothing Then
-                Return MyBase.Font
-            End If
-            Return _WelcomeFont
+            Return If(_WelcomeFont, MyBase.Font)
         End Get
         Set(value As Font)
             If _WelcomeFont IsNot value Then
@@ -214,10 +204,12 @@ Public Class Wizard
     <Description("Ruft die Schriftart ab, die zum Anzeigen des Titels einer Begrüßungs- oder Abschlussseite verwendet wird, oder legt diese fest.")>
     Public Property WelcomeTitleFont As Font
         Get
-            If _WelcomeTitleFont Is Nothing Then
-                Return New Font(MyBase.Font.FontFamily, MyBase.Font.Size + 10.0F, FontStyle.Bold)
-            End If
-            Return _WelcomeTitleFont
+            Return If(
+                _WelcomeTitleFont,
+                New Font(
+                MyBase.Font.FontFamily,
+                MyBase.Font.Size + 10.0F,
+                FontStyle.Bold))
         End Get
         Set(value As Font)
             If _WelcomeTitleFont IsNot value Then
@@ -298,7 +290,7 @@ Public Class Wizard
         Me.InitializeComponent()
         Me.InitializeStyles()
         MyBase.Dock = DockStyle.Fill
-        Me.pagesField = New PagesCollection(Me)
+        _Pages = New PagesCollection(Me)
 
     End Sub
 
@@ -328,46 +320,57 @@ Public Class Wizard
     End Function
 
     Public Sub [Next]()
-        If Me.SelectedIndex = Me.pagesField.Count - 1 Then
+        If Me.SelectedIndex = _Pages.Count - 1 Then
             Me.ButtonNext.Enabled = False
         Else
-            Me.OnBeforeSwitchPages(New BeforeSwitchPagesEventArgs(Me.SelectedIndex, Me.SelectedIndex + 1))
+            Me.OnBeforeSwitchPages(
+                New BeforeSwitchPagesEventArgs(
+                Me.SelectedIndex,
+                Me.SelectedIndex + 1))
         End If
+
     End Sub
 
     Public Sub Back()
+
         If Me.SelectedIndex = 0 Then
             Me.ButtonBack.Enabled = False
         Else
-            Me.OnBeforeSwitchPages(New BeforeSwitchPagesEventArgs(Me.SelectedIndex, Me.SelectedIndex - 1))
+            Me.OnBeforeSwitchPages(
+                New BeforeSwitchPagesEventArgs(
+                Me.SelectedIndex,
+                Me.SelectedIndex - 1))
         End If
+
     End Sub
 
     Private Sub ActivatePage(index As Integer)
-        If index >= 0 AndAlso index < Me.pagesField.Count Then
-            Dim page As WizardPage = Me.pagesField(index)
+
+        If index >= 0 AndAlso index < _Pages.Count Then
+            Dim page As WizardPage = _Pages(index)
             Me.ActivatePage(page)
         End If
+
     End Sub
 
     Private Sub ActivatePage(page As WizardPage)
 
-        If Not Me.pagesField.Contains(page) Then
+        If Not _Pages.Contains(page) Then
             Return
         End If
 
-        If Me.selectedPageField IsNot Nothing Then
-            Me.selectedPageField.Visible = False
+        If _SelectedPage IsNot Nothing Then
+            _SelectedPage.Visible = False
         End If
 
-        Me.selectedPageField = page
+        _SelectedPage = page
 
-        If Me.selectedPageField IsNot Nothing Then
+        If _SelectedPage IsNot Nothing Then
 
-            Me.selectedPageField.Parent = Me
+            _SelectedPage.Parent = Me
 
-            If Not MyBase.Contains(Me.selectedPageField) Then
-                Me.Container.Add(Me.selectedPageField)
+            If Not MyBase.Contains(_SelectedPage) Then
+                Me.Container.Add(_SelectedPage)
             End If
 
 
@@ -376,7 +379,7 @@ Public Class Wizard
             'TODO: Hier auf die verschiedenen Sprachen reagieren
 
 
-            If Me.selectedPageField.Style = PageStyle.Finish Then
+            If _SelectedPage.Style = PageStyle.Finish Then
                 Me.ButtonCancel.Text = "Fertigstellen"
                 Me.ButtonCancel.DialogResult = DialogResult.OK
             Else
@@ -384,7 +387,7 @@ Public Class Wizard
                 Me.ButtonCancel.DialogResult = DialogResult.Cancel
             End If
 
-            If Me.selectedPageField.Style = PageStyle.Custom And Me.selectedPageField Is Me.pagesField(Me.pagesField.Count - 1) Then
+            If _SelectedPage.Style = PageStyle.Custom And _SelectedPage Is _Pages(_Pages.Count - 1) Then
                 Me.ButtonCancel.Text = "OK"
                 Me.ButtonCancel.DialogResult = DialogResult.OK
             End If
@@ -392,20 +395,16 @@ Public Class Wizard
             '----------------------------------------------------
 
 
-            Me.selectedPageField.SetBounds(0, 0, Me.Width, Me.Height - 48)
-            Me.selectedPageField.Visible = True
-            Me.selectedPageField.BringToFront()
-            Me.FocusFirstTabIndex(Me.selectedPageField)
+            _SelectedPage.SetBounds(0, 0, Me.Width, Me.Height - 48)
+            _SelectedPage.Visible = True
+            _SelectedPage.BringToFront()
+            Me.FocusFirstTabIndex(_SelectedPage)
 
         End If
 
-        If Me.SelectedIndex > 0 Then
-            Me.ButtonBack.Enabled = True
-        Else
-            Me.ButtonBack.Enabled = False
-        End If
+        Me.ButtonBack.Enabled = Me.SelectedIndex > 0
 
-        If Me.SelectedIndex < Me.pagesField.Count - 1 Then
+        If Me.SelectedIndex < _Pages.Count - 1 Then
             Me.ButtonNext.Enabled = True
         Else
             If Not Me.DesignMode Then
@@ -413,8 +412,8 @@ Public Class Wizard
             Me.ButtonNext.Enabled = False
         End If
 
-        If Me.selectedPageField IsNot Nothing Then
-            Me.selectedPageField.Invalidate()
+        If _SelectedPage IsNot Nothing Then
+            _SelectedPage.Invalidate()
         Else
             Me.Invalidate()
         End If
@@ -433,9 +432,9 @@ Public Class Wizard
         Next
 
         If control IsNot Nothing Then
-            control.Focus()
+            Dim unused = control.Focus()
         Else
-            container.Focus()
+            Dim unused1 = container.Focus()
         End If
 
     End Sub
@@ -476,7 +475,7 @@ Public Class Wizard
     Protected Overrides Sub OnLoad(e As EventArgs)
 
         MyBase.OnLoad(e)
-        If Me.pagesField.Count > 0 Then
+        If _Pages.Count > 0 Then
             Me.ActivatePage(0)
         End If
 
@@ -485,13 +484,13 @@ Public Class Wizard
     Protected Overrides Sub OnResize(e As EventArgs)
 
         MyBase.OnResize(e)
-        If Me.selectedPageField IsNot Nothing Then
-            Me.selectedPageField.SetBounds(0, 0, Me.Width, Me.Height - 48)
+        If _SelectedPage IsNot Nothing Then
+            _SelectedPage.SetBounds(0, 0, Me.Width, Me.Height - 48)
         End If
-        Me.ButtonHelp.Location = New Point(Me.ButtonHelp.Location.X, Me.Height - Me.offsetBack.Y)
-        Me.ButtonBack.Location = New Point(Me.Width - Me.offsetBack.X, Me.Height - Me.offsetBack.Y)
-        Me.ButtonNext.Location = New Point(Me.Width - Me.offsetNext.X, Me.Height - Me.offsetNext.Y)
-        Me.ButtonCancel.Location = New Point(Me.Width - Me.offsetCancel.X, Me.Height - Me.offsetCancel.Y)
+        Me.ButtonHelp.Location = New Point(Me.ButtonHelp.Location.X, Me.Height - _OffsetBack.Y)
+        Me.ButtonBack.Location = New Point(Me.Width - _OffsetBack.X, Me.Height - _OffsetBack.Y)
+        Me.ButtonNext.Location = New Point(Me.Width - _OffsetNext.X, Me.Height - _OffsetNext.Y)
+        Me.ButtonCancel.Location = New Point(Me.Width - _OffsetCancel.X, Me.Height - _OffsetCancel.Y)
         MyBase.Refresh()
 
     End Sub
@@ -502,15 +501,19 @@ Public Class Wizard
         Dim clientRectangle = MyBase.ClientRectangle
         clientRectangle.Y = Me.Height - 48
         clientRectangle.Height = 48
-        ControlPaint.DrawBorder3D(e.Graphics, clientRectangle, Border3DStyle.Etched, Border3DSide.Top)
+        ControlPaint.DrawBorder3D(
+            e.Graphics,
+            clientRectangle,
+            Border3DStyle.Etched,
+            Border3DSide.Top)
 
     End Sub
 
     Protected Overrides Sub OnControlAdded(e As ControlEventArgs)
 
         If Not (TypeOf e.Control Is WizardPage) AndAlso e.Control IsNot Me.ButtonCancel AndAlso e.Control IsNot Me.ButtonNext AndAlso e.Control IsNot Me.ButtonBack Then
-            If Me.selectedPageField IsNot Nothing Then
-                Me.selectedPageField.Controls.Add(e.Control)
+            If _SelectedPage IsNot Nothing Then
+                _SelectedPage.Controls.Add(e.Control)
             End If
         Else
             MyBase.OnControlAdded(e)
@@ -519,7 +522,8 @@ Public Class Wizard
     End Sub
 
     Private Sub Button_Click(sender As Object, e As EventArgs) Handles _
-        ButtonNext.Click, ButtonBack.Click, ButtonCancel.Click
+        ButtonNext.Click, ButtonBack.Click,
+        ButtonCancel.Click, ButtonHelp.Click
 
         Select Case True
 

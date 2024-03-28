@@ -24,10 +24,10 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.Wizard1 = New SchlumpfSoft.Wizard()
+        Me.PageWelcome1 = New SchlumpfSoft.PageWelcome()
         Me.PageFinish1 = New SchlumpfSoft.PageFinish()
         Me.PageCustom1 = New SchlumpfSoft.PageCustom()
         Me.PageStandard1 = New SchlumpfSoft.PageStandard()
-        Me.PageWelcome1 = New SchlumpfSoft.PageWelcome()
         Me.Wizard1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -44,6 +44,15 @@ Partial Class Form1
         Me.Wizard1.Pages.AddRange(New SchlumpfSoft.WizardPage() {Me.PageWelcome1, Me.PageStandard1, Me.PageCustom1, Me.PageFinish1})
         Me.Wizard1.Size = New System.Drawing.Size(465, 296)
         Me.Wizard1.TabIndex = 0
+        '
+        'PageWelcome1
+        '
+        Me.PageWelcome1.Description = "Beschreibung"
+        Me.PageWelcome1.Location = New System.Drawing.Point(0, 0)
+        Me.PageWelcome1.Name = "PageWelcome1"
+        Me.PageWelcome1.Size = New System.Drawing.Size(465, 248)
+        Me.PageWelcome1.TabIndex = 10
+        Me.PageWelcome1.Title = "Mein Assi"
         '
         'PageFinish1
         '
@@ -71,15 +80,6 @@ Partial Class Form1
         Me.PageStandard1.Size = New System.Drawing.Size(395, 190)
         Me.PageStandard1.TabIndex = 11
         Me.PageStandard1.Title = "Standardseite"
-        '
-        'PageWelcome1
-        '
-        Me.PageWelcome1.Description = "Beschreibung"
-        Me.PageWelcome1.Location = New System.Drawing.Point(0, 0)
-        Me.PageWelcome1.Name = "PageWelcome1"
-        Me.PageWelcome1.Size = New System.Drawing.Size(465, 248)
-        Me.PageWelcome1.TabIndex = 10
-        Me.PageWelcome1.Title = "Mein Assi"
         '
         'Form1
         '

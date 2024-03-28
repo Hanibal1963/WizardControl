@@ -6,59 +6,55 @@
 
 Imports System
 
-Public Class BeforeSwitchPagesEventArgs
+Public Class BeforeSwitchPagesEventArgs : Inherits AfterSwitchPagesEventArgs
 
-    Inherits AfterSwitchPagesEventArgs
-
-    Private cancelField As Boolean = False
+    Private _Cancel As Boolean = False
 
     Public Property Cancel As Boolean
         Get
-            Return Me.cancelField
+            Return Me._Cancel
         End Get
         Set(value As Boolean)
-            Me.cancelField = value
+            Me._Cancel = value
         End Set
     End Property
 
     Public Overloads Property NewIndex As Integer
         Get
-            Return Me.newIndexField
+            Return Me._NewIndex
         End Get
         Set(value As Integer)
-            Me.newIndexField = value
+            Me._NewIndex = value
         End Set
     End Property
 
-    Friend Sub New(oldIndex As Integer, newIndex As Integer)
-        MyBase.New(oldIndex, newIndex)
+    Friend Sub New(OldIndex As Integer, NewIndex As Integer)
+        MyBase.New(OldIndex, NewIndex)
     End Sub
 
 End Class
 
-Public Class AfterSwitchPagesEventArgs
+Public Class AfterSwitchPagesEventArgs : Inherits EventArgs
 
-    Inherits EventArgs
+    Protected _NewIndex As Integer
+    Private ReadOnly _OldIndex As Integer
 
-    Private ReadOnly oldIndexField As Integer
-
-    Protected newIndexField As Integer
 
     Public ReadOnly Property OldIndex As Integer
         Get
-            Return Me.oldIndexField
+            Return Me._OldIndex
         End Get
     End Property
 
     Public ReadOnly Property NewIndex As Integer
         Get
-            Return Me.newIndexField
+            Return Me._NewIndex
         End Get
     End Property
 
-    Friend Sub New(oldIndex As Integer, newIndex As Integer)
-        Me.oldIndexField = oldIndex
-        Me.newIndexField = newIndex
+    Friend Sub New(OldIndex As Integer, NewIndex As Integer)
+        Me._OldIndex = OldIndex
+        Me._NewIndex = NewIndex
     End Sub
 
 End Class

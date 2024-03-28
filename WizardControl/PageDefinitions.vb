@@ -24,30 +24,28 @@ End Enum
 
 ''' <summary>Definiert eine Seite des Controls</summary>
 <ToolboxItem(False)>
-Public Class WizardPage
+Public Class WizardPage : Inherits Panel
 
-    Inherits Panel
+    'Private Const HEADER_AREA_HEIGHT As Integer = 64
+    'Private Const HEADER_GLYPH_SIZE As Integer = 48
+    'Private Const HEADER_TEXT_PADDING As Integer = 8
+    'Private Const WELCOME_GLYPH_WIDTH As Integer = 164
 
-    Private Const HEADER_AREA_HEIGHT As Integer = 64
-    Private Const HEADER_GLYPH_SIZE As Integer = 48
-    Private Const HEADER_TEXT_PADDING As Integer = 8
-    Private Const WELCOME_GLYPH_WIDTH As Integer = 164
-
-    Private styleField As PageStyle = PageStyle.Standard
-    Private titleField As String = String.Empty
-    Private descriptionField As String = String.Empty
+    Private _Style As PageStyle = PageStyle.Standard
+    Private _Title As String = String.Empty
+    Private _Description As String = String.Empty
 
     <Category("Wizard")>
     <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
     Public Overridable Property Style As PageStyle
         Get
-            Return Me.styleField
+            Return Me._Style
         End Get
         Set(value As PageStyle)
-            If Me.styleField = value Then
+            If Me._Style = value Then
                 Return
             End If
-            Me.styleField = value
+            Me._Style = value
             If Me.Parent IsNot Nothing AndAlso TypeOf Me.Parent Is Wizard Then
                 Dim wizard As Wizard = CType(Me.Parent, Wizard)
                 If wizard.SelectedPage Is Me Then
@@ -64,14 +62,14 @@ Public Class WizardPage
     <Description("Ruft den Titel der Assistentenseite ab oder legt diesen fest.")>
     Public Overridable Property Title As String
         Get
-            Return Me.titleField
+            Return Me._Title
         End Get
         Set(value As String)
             If Equals(value, Nothing) Then
                 value = String.Empty
             End If
-            If Not Equals(Me.titleField, value) Then
-                Me.titleField = value
+            If Not Equals(Me._Title, value) Then
+                Me._Title = value
                 Me.Invalidate()
             End If
         End Set
@@ -82,14 +80,14 @@ Public Class WizardPage
     <Description("Ruft die Beschreibung der Assistentenseite ab oder legt diese fest.")>
     Public Overridable Property Description As String
         Get
-            Return Me.descriptionField
+            Return Me._Description
         End Get
         Set(value As String)
             If Equals(value, Nothing) Then
                 value = String.Empty
             End If
-            If Not Equals(Me.descriptionField, value) Then
-                Me.descriptionField = value
+            If Not Equals(Me._Description, value) Then
+                Me._Description = value
                 Me.Invalidate()
             End If
         End Set
@@ -107,31 +105,44 @@ Public Class WizardPage
     End Sub
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
+
         MyBase.OnPaint(e)
-        If Me.styleField = PageStyle.Custom Then
+
+        If Me._Style = PageStyle.Custom Then
             Return
         End If
+
         Dim clientRectangle = MyBase.ClientRectangle
         Dim empty = Rectangle.Empty
         Dim empty2 = Rectangle.Empty
         Dim empty3 = Rectangle.Empty
         Dim genericDefault = StringFormat.GenericDefault
+
         genericDefault.LineAlignment = StringAlignment.Near
         genericDefault.Alignment = StringAlignment.Near
         genericDefault.Trimming = StringTrimming.EllipsisCharacter
+
         Select Case Me.Style
+
             Case PageStyle.Standard
+
                 clientRectangle.Height = 64
                 ControlPaint.DrawBorder3D(e.Graphics, clientRectangle, Border3DStyle.Etched, Border3DSide.Bottom)
+
                 clientRectangle.Height -= SystemInformation.Border3DSize.Height
                 e.Graphics.FillRectangle(SystemBrushes.Window, clientRectangle)
+
                 Dim num2 As Integer = CInt(Math.Floor(8.0))
+
                 empty.Location = New Point(Me.Width - 48 - num2, num2)
                 empty.Size = New Size(48, 48)
+
                 Dim image2 As Image = Nothing
                 Dim font3 = MyBase.Font
                 Dim font4 = MyBase.Font
+
                 If Me.Parent IsNot Nothing AndAlso TypeOf Me.Parent Is Wizard Then
+
                     Dim wizard2 As Wizard = CType(Me.Parent, Wizard)
                     image2 = wizard2.ImageHeader
                     If image2 Is Nothing Then
@@ -140,246 +151,247 @@ Public Class WizardPage
                     font3 = wizard2.HeaderFont
                     font4 = wizard2.HeaderTitleFont
                 End If
+
                 If image2 Is Nothing Then
                     ControlPaint.DrawFocusRectangle(e.Graphics, empty)
                 Else
                     e.Graphics.DrawImage(image2, empty)
                 End If
-                Dim num3 As Integer = CInt(Math.Ceiling(e.Graphics.MeasureString(Me.titleField, font4, 0, genericDefault).Height))
+
+                Dim num3 As Integer = CInt(Math.Ceiling(e.Graphics.MeasureString(Me._Title, font4, 0, genericDefault).Height))
+
                 empty2.Location = New Point(8, 8)
                 empty2.Size = New Size(empty.Left - 8, num3)
                 empty3.Location = empty2.Location
                 empty3.Y += num3 + 4
                 empty3.Size = New Size(empty2.Width, 64 - empty3.Y)
-                e.Graphics.DrawString(Me.titleField, font4, SystemBrushes.WindowText, empty2, genericDefault)
-                e.Graphics.DrawString(Me.descriptionField, font3, SystemBrushes.WindowText, empty3, genericDefault)
+
+                e.Graphics.DrawString(Me._Title, font4, SystemBrushes.WindowText, empty2, genericDefault)
+                e.Graphics.DrawString(Me._Description, font3, SystemBrushes.WindowText, empty3, genericDefault)
+
                 Exit Select
+
             Case PageStyle.Welcome, PageStyle.Finish
+
                 e.Graphics.FillRectangle(SystemBrushes.Window, clientRectangle)
                 empty.Location = Point.Empty
                 empty.Size = New Size(164, Me.Height)
+
                 Dim image As Image = Nothing
                 Dim font = MyBase.Font
                 Dim font2 = MyBase.Font
+
                 If Me.Parent IsNot Nothing AndAlso TypeOf Me.Parent Is Wizard Then
                     Dim wizard As Wizard = CType(Me.Parent, Wizard)
                     image = wizard.ImageWelcome
                     font = wizard.WelcomeFont
                     font2 = wizard.WelcomeTitleFont
                 End If
+
                 If image Is Nothing Then
                     ControlPaint.DrawFocusRectangle(e.Graphics, empty)
                 Else
                     e.Graphics.DrawImage(image, empty)
                 End If
+
                 empty2.Location = New Point(172, 8)
                 empty2.Width = Me.Width - empty2.Left - 8
-                Dim num As Integer = CInt(Math.Ceiling(e.Graphics.MeasureString(Me.titleField, font2, empty2.Width, genericDefault).Height))
+
+                Dim num As Integer = CInt(Math.Ceiling(e.Graphics.MeasureString(Me._Title, font2, empty2.Width, genericDefault).Height))
+
                 empty3.Location = empty2.Location
                 empty3.Y += num + 8
                 empty3.Size = New Size(Me.Width - empty3.Left - 8, Me.Height - empty3.Y)
-                e.Graphics.DrawString(Me.titleField, font2, SystemBrushes.WindowText, empty2, genericDefault)
-                e.Graphics.DrawString(Me.descriptionField, font, SystemBrushes.WindowText, empty3, genericDefault)
+
+                e.Graphics.DrawString(Me._Title, font2, SystemBrushes.WindowText, empty2, genericDefault)
+                e.Graphics.DrawString(Me._Description, font, SystemBrushes.WindowText, empty3, genericDefault)
+
                 Exit Select
+
         End Select
+
     End Sub
 
-    Private Sub InitializeComponent()
-        Me.SuspendLayout()
-        Me.ResumeLayout(False)
-    End Sub
+    'Private Sub InitializeComponent()
+    '    Me.SuspendLayout()
+    '    Me.ResumeLayout(False)
+    'End Sub
 
 End Class
 
 ''' <summary>Definiert die Abschlußseite</summary>
 <ToolboxItem(False)>
-Public Class PageFinish
+Public Class PageFinish : Inherits WizardPage
 
-    Inherits WizardPage
-
-    Private styleField As PageStyle = PageStyle.Finish
+    Private _Style As PageStyle = PageStyle.Finish
 
     <DefaultValue(PageStyle.Finish)>
     <Category("Wizard")>
     <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
     Public Overrides Property Style As PageStyle
         Get
-            Return Me.styleField
+            Return Me._Style
         End Get
         Set(value As PageStyle)
-            Me.styleField = value
+            Me._Style = value
         End Set
     End Property
 
-    Private Sub InitializeComponent()
-        Me.SuspendLayout()
-        Me.BackColor = SystemColors.ControlDarkDark
-        Me.ResumeLayout(False)
-    End Sub
+    'Private Sub InitializeComponent()
+    '    Me.SuspendLayout()
+    '    Me.BackColor = SystemColors.ControlDarkDark
+    '    Me.ResumeLayout(False)
+    'End Sub
 
 End Class
 
 ''' <summary>Definiert eine Benutzerdefinierte Seite</summary>
 <ToolboxItem(False)>
-Public Class PageCustom
+Public Class PageCustom : Inherits WizardPage
 
-    Inherits WizardPage
-
-    Private styleField As PageStyle = PageStyle.Custom
+    Private _Style As PageStyle = PageStyle.Custom
 
     <DefaultValue(PageStyle.Custom)>
     <Category("Wizard")>
     <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
     Public Overrides Property Style As PageStyle
         Get
-            Return Me.styleField
+            Return Me._Style
         End Get
         Set(value As PageStyle)
-            Me.styleField = value
+            Me._Style = value
         End Set
     End Property
 
-    Private Sub InitializeComponent()
-        Me.SuspendLayout()
-        Me.BackColor = SystemColors.ControlDarkDark
-        Me.ResumeLayout(False)
-    End Sub
+    'Private Sub InitializeComponent()
+    '    Me.SuspendLayout()
+    '    Me.BackColor = SystemColors.ControlDarkDark
+    '    Me.ResumeLayout(False)
+    'End Sub
 
 End Class
 
 ''' <summary>Definiert eine Standardseite</summary>
 <ToolboxItem(False)>
-Public Class PageStandard
+Public Class PageStandard : Inherits WizardPage
 
-    Inherits WizardPage
-
-    Private styleField As PageStyle = PageStyle.Standard
+    Private _Style As PageStyle = PageStyle.Standard
 
     <DefaultValue(PageStyle.Standard)>
     <Category("Wizard")>
     <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
     Public Overrides Property Style As PageStyle
         Get
-            Return Me.styleField
+            Return Me._Style
         End Get
         Set(value As PageStyle)
-            Me.styleField = value
+            Me._Style = value
         End Set
     End Property
 
-    Private Sub InitializeComponent()
-        Me.SuspendLayout()
-        Me.BackColor = SystemColors.ControlDarkDark
-        Me.ResumeLayout(False)
-    End Sub
+    'Private Sub InitializeComponent()
+    '    Me.SuspendLayout()
+    '    Me.BackColor = SystemColors.ControlDarkDark
+    '    Me.ResumeLayout(False)
+    'End Sub
 
 End Class
 
 ''' <summary>Definiert die Willkommenseite</summary>
 <ToolboxItem(False)>
-Public Class PageWelcome
+Public Class PageWelcome : Inherits WizardPage
 
-    Inherits WizardPage
-
-    Private styleField As PageStyle = PageStyle.Welcome
+    Private _Style As PageStyle = PageStyle.Welcome
 
     <DefaultValue(PageStyle.Welcome)>
     <Category("Wizard")>
     <Description("Ruft den Stil der Assistentenseite ab oder legt diesen fest.")>
     Public Overrides Property Style As PageStyle
         Get
-            Return Me.styleField
+            Return Me._Style
         End Get
         Set(value As PageStyle)
-            Me.styleField = value
+            Me._Style = value
         End Set
     End Property
 
-    Private Sub InitializeComponent()
-        Me.SuspendLayout()
-        Me.BackColor = SystemColors.ControlDarkDark
-        Me.ResumeLayout(False)
-    End Sub
+    'Private Sub InitializeComponent()
+    '    Me.SuspendLayout()
+    '    Me.BackColor = SystemColors.ControlDarkDark
+    '    Me.ResumeLayout(False)
+    'End Sub
 
 End Class
 
 ''' <summary>Dient zum anzeigen der Seitenstile im Seitendesigner</summary>
-Friend Class PagesCellectionEditor
+Friend Class PagesCollectionEditor : Inherits CollectionEditor
 
-    Inherits CollectionEditor
+    Private ReadOnly _PageTypes As Type()
 
-    Private Types As Type()
-
-    Public Sub New(type As Type)
-        MyBase.New(type)
-        Me.Types = New Type(3) {GetType(PageWelcome), GetType(PageStandard), GetType(PageCustom), GetType(PageFinish)}
+    Public Sub New(PageType As Type)
+        MyBase.New(PageType)
+        Me._PageTypes = New Type(3) {GetType(PageWelcome), GetType(PageStandard), GetType(PageCustom), GetType(PageFinish)}
     End Sub
 
     Protected Overrides Function CreateNewItemTypes() As Type()
-        Return Me.Types
+        Return Me._PageTypes
     End Function
 
 End Class
 
 ''' <summary>Definiert die Auflistung der Seiten des Assistenten</summary>
-Public Class PagesCollection
+Public Class PagesCollection : Inherits CollectionBase
 
-    Inherits CollectionBase
+    Private ReadOnly _Owner As Wizard = Nothing
 
-    Private owner As Wizard = Nothing
-
-    Default Public Property Item(index As Integer) As WizardPage
+    Default Public Property Item(Index As Integer) As WizardPage
         Get
-            Return CType(List(index), WizardPage)
+            Return CType(Me.List(Index), WizardPage)
         End Get
         Set(value As WizardPage)
-            List(index) = value
+            Me.List(Index) = value
         End Set
     End Property
 
-    Friend Sub New(owner As Wizard)
-        Me.owner = owner
+    Friend Sub New(Owner As Wizard)
+        Me._Owner = Owner
     End Sub
 
-    Public Function Add(value As WizardPage) As Integer
-        Return List.Add(value)
+    Public Function Add(Page As WizardPage) As Integer
+        Return Me.List.Add(Page)
     End Function
 
-    Public Sub AddRange(pages As WizardPage())
-        For Each value As WizardPage In pages
-            Me.Add(value)
+    Public Sub AddRange(Pages As WizardPage())
+        For Each value As WizardPage In Pages
+            Dim unused = Me.Add(value)
         Next
     End Sub
 
-    Public Function IndexOf(value As WizardPage) As Integer
-        Return List.IndexOf(value)
+    Public Function IndexOf(Page As WizardPage) As Integer
+        Return Me.List.IndexOf(Page)
     End Function
 
-    Public Sub Insert(index As Integer, value As WizardPage)
-        List.Insert(index, value)
+    Public Sub Insert(Index As Integer, Page As WizardPage)
+        Me.List.Insert(Index, Page)
     End Sub
 
-    Public Sub Remove(value As WizardPage)
-        List.Remove(value)
+    Public Sub Remove(Page As WizardPage)
+        Me.List.Remove(Page)
     End Sub
 
-    Public Function Contains(value As WizardPage) As Boolean
-        Return List.Contains(value)
+    Public Function Contains(Page As WizardPage) As Boolean
+        Return Me.List.Contains(Page)
     End Function
 
-    Protected Overrides Sub OnInsertComplete(index As Integer, value As Object)
-        MyBase.OnInsertComplete(index, value)
-        Me.owner.SelectedIndex = index
+    Protected Overrides Sub OnInsertComplete(Index As Integer, Value As Object)
+        MyBase.OnInsertComplete(Index, Value)
+        Me._Owner.SelectedIndex = Index
     End Sub
 
-    Protected Overrides Sub OnRemoveComplete(index As Integer, value As Object)
-        MyBase.OnRemoveComplete(index, value)
-        If Me.owner.SelectedIndex = index Then
-            If index < InnerList.Count Then
-                Me.owner.SelectedIndex = index
-            Else
-                Me.owner.SelectedIndex = InnerList.Count - 1
-            End If
+    Protected Overrides Sub OnRemoveComplete(Index As Integer, Value As Object)
+        MyBase.OnRemoveComplete(Index, Value)
+        If Me._Owner.SelectedIndex = Index Then
+            Me._Owner.SelectedIndex = If(Index < Me.InnerList.Count, Index, Me.InnerList.Count - 1)
         End If
     End Sub
 

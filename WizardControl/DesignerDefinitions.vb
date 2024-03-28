@@ -42,7 +42,7 @@ Friend Class WizardDesigner
             If wizard IsNot Nothing Then
                 Dim x As Integer = CShort(CInt(msg.LParam) And &HFFFF)
                 Dim y As Integer = CShort(CUInt(CInt(msg.LParam) And -65536) >> 16)
-                Dim pt As Point = New Point(x, y)
+                Dim pt As New Point(x, y)
                 If msg.HWnd = wizard.ButtonNext.Handle Then
                     If wizard.ButtonNext.Enabled AndAlso wizard.ButtonNext.ClientRectangle.Contains(pt) Then
                         wizard.Next()

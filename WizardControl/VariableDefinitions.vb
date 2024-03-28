@@ -26,6 +26,17 @@ Module VariableDefinitions
     ''' <summary>speichert die Schriftart für den Titel einer Standardeite</summary>
     Friend _HeaderTitleFont As Font = Nothing
 
+    ''' <summary>speichert die aktuelle Seite</summary>
+    Friend _SelectedPage As WizardPage = Nothing
 
+    ''' <summary>speichert die Seiten des Assistenten</summary>
+    Friend _Pages As PagesCollection = Nothing
+
+
+    Friend ReadOnly _OffsetCancel As New Point(84, 36)
+
+    Friend ReadOnly _OffsetNext As New Point(164, 36)
+
+    Friend ReadOnly _OffsetBack As New Point(244, 36)
 
 End Module
