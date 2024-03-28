@@ -61,6 +61,33 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die OK ähnelt.
+        '''</summary>
+        Friend ReadOnly Property ButtonCancelText_PageCustom() As String
+            Get
+                Return ResourceManager.GetString("ButtonCancelText_PageCustom", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fertigstellen ähnelt.
+        '''</summary>
+        Friend ReadOnly Property ButtonCancelText_PageFinish() As String
+            Get
+                Return ResourceManager.GetString("ButtonCancelText_PageFinish", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Abbruch ähnelt.
+        '''</summary>
+        Friend ReadOnly Property ButtonCancelText_Standard() As String
+            Get
+                Return ResourceManager.GetString("ButtonCancelText_Standard", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property HeaderImage() As System.Drawing.Bitmap

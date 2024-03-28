@@ -20,8 +20,6 @@ Imports System.Windows.Forms.Design
 <Designer(GetType(WizardDesigner))>
 Public Class Wizard : Inherits UserControl
 
-    'Private Const FOOTER_AREA_HEIGHT As Integer = 48
-
     Public Delegate Sub BeforeSwitchPagesEventHandler(sender As Object, e As BeforeSwitchPagesEventArgs)
     Public Delegate Sub AfterSwitchPagesEventHandler(sender As Object, e As AfterSwitchPagesEventArgs)
 
@@ -303,21 +301,21 @@ Public Class Wizard : Inherits UserControl
 
     End Sub
 
-    Protected Function ShouldSerializeHeaderFont() As Boolean
-        Return _HeaderFont IsNot Nothing
-    End Function
+    'Protected Function ShouldSerializeHeaderFont() As Boolean
+    '    Return _HeaderFont IsNot Nothing
+    'End Function
 
-    Protected Function ShouldSerializeHeaderTitleFont() As Boolean
-        Return _HeaderTitleFont IsNot Nothing
-    End Function
+    'Protected Function ShouldSerializeHeaderTitleFont() As Boolean
+    '    Return _HeaderTitleFont IsNot Nothing
+    'End Function
 
-    Protected Function ShouldSerializeWelcomeFont() As Boolean
-        Return _WelcomeFont IsNot Nothing
-    End Function
+    'Protected Function ShouldSerializeWelcomeFont() As Boolean
+    '    Return _WelcomeFont IsNot Nothing
+    'End Function
 
-    Protected Function ShouldSerializeWelcomeTitleFont() As Boolean
-        Return _WelcomeTitleFont IsNot Nothing
-    End Function
+    'Protected Function ShouldSerializeWelcomeTitleFont() As Boolean
+    '    Return _WelcomeTitleFont IsNot Nothing
+    'End Function
 
     Public Sub [Next]()
         If Me.SelectedIndex = _Pages.Count - 1 Then
@@ -369,31 +367,23 @@ Public Class Wizard : Inherits UserControl
 
             _SelectedPage.Parent = Me
 
-            If Not MyBase.Contains(_SelectedPage) Then
+            If Not Me.Contains(_SelectedPage) Then
                 Me.Container.Add(_SelectedPage)
             End If
 
-
-            '---------------------------------------------------
-
-            'TODO: Hier auf die verschiedenen Sprachen reagieren
-
-
-            If _SelectedPage.Style = PageStyle.Finish Then
-                Me.ButtonCancel.Text = "Fertigstellen"
-                Me.ButtonCancel.DialogResult = DialogResult.OK
-            Else
-                Me.ButtonCancel.Text = "Abbruch"
-                Me.ButtonCancel.DialogResult = DialogResult.Cancel
-            End If
+            Select Case _SelectedPage.Style
+                Case PageStyle.Finish
+                    Me.ButtonCancel.Text = My.Resources.ButtonCancelText_PageFinish
+                    Me.ButtonCancel.DialogResult = DialogResult.OK
+                Case Else
+                    Me.ButtonCancel.Text = My.Resources.ButtonCancelText_Standard
+                    Me.ButtonCancel.DialogResult = DialogResult.Cancel
+            End Select
 
             If _SelectedPage.Style = PageStyle.Custom And _SelectedPage Is _Pages(_Pages.Count - 1) Then
-                Me.ButtonCancel.Text = "OK"
+                Me.ButtonCancel.Text = My.Resources.ButtonCancelText_PageCustom
                 Me.ButtonCancel.DialogResult = DialogResult.OK
             End If
-
-            '----------------------------------------------------
-
 
             _SelectedPage.SetBounds(0, 0, Me.Width, Me.Height - 48)
             _SelectedPage.Visible = True

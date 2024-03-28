@@ -26,11 +26,6 @@ End Enum
 <ToolboxItem(False)>
 Public Class WizardPage : Inherits Panel
 
-    'Private Const HEADER_AREA_HEIGHT As Integer = 64
-    'Private Const HEADER_GLYPH_SIZE As Integer = 48
-    'Private Const HEADER_TEXT_PADDING As Integer = 8
-    'Private Const WELCOME_GLYPH_WIDTH As Integer = 164
-
     Private _Style As PageStyle = PageStyle.Standard
     Private _Title As String = String.Empty
     Private _Description As String = String.Empty
@@ -94,23 +89,25 @@ Public Class WizardPage : Inherits Panel
     End Property
 
     Public Sub New()
+
         Me.InitializeStyles()
+
     End Sub
 
     Private Sub InitializeStyles()
+
         Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
         Me.SetStyle(ControlStyles.DoubleBuffer, True)
         Me.SetStyle(ControlStyles.ResizeRedraw, True)
         Me.SetStyle(ControlStyles.UserPaint, True)
+
     End Sub
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
 
         MyBase.OnPaint(e)
 
-        If Me._Style = PageStyle.Custom Then
-            Return
-        End If
+        If Me._Style = PageStyle.Custom Then Return
 
         Dim clientRectangle = MyBase.ClientRectangle
         Dim empty = Rectangle.Empty
@@ -127,10 +124,16 @@ Public Class WizardPage : Inherits Panel
             Case PageStyle.Standard
 
                 clientRectangle.Height = 64
-                ControlPaint.DrawBorder3D(e.Graphics, clientRectangle, Border3DStyle.Etched, Border3DSide.Bottom)
+                ControlPaint.DrawBorder3D(
+                    e.Graphics,
+                    clientRectangle,
+                    Border3DStyle.Etched,
+                    Border3DSide.Bottom)
 
                 clientRectangle.Height -= SystemInformation.Border3DSize.Height
-                e.Graphics.FillRectangle(SystemBrushes.Window, clientRectangle)
+                e.Graphics.FillRectangle(
+                    SystemBrushes.Window,
+                    clientRectangle)
 
                 Dim num2 As Integer = CInt(Math.Floor(8.0))
 
@@ -158,16 +161,35 @@ Public Class WizardPage : Inherits Panel
                     e.Graphics.DrawImage(image2, empty)
                 End If
 
-                Dim num3 As Integer = CInt(Math.Ceiling(e.Graphics.MeasureString(Me._Title, font4, 0, genericDefault).Height))
+                Dim num3 As Integer = CInt(
+                    Math.Ceiling(
+                    e.Graphics.MeasureString(
+                    Me._Title,
+                    font4,
+                    0,
+                    genericDefault).Height))
 
                 empty2.Location = New Point(8, 8)
                 empty2.Size = New Size(empty.Left - 8, num3)
                 empty3.Location = empty2.Location
                 empty3.Y += num3 + 4
-                empty3.Size = New Size(empty2.Width, 64 - empty3.Y)
+                empty3.Size = New Size(
+                    empty2.Width,
+                    64 - empty3.Y)
 
-                e.Graphics.DrawString(Me._Title, font4, SystemBrushes.WindowText, empty2, genericDefault)
-                e.Graphics.DrawString(Me._Description, font3, SystemBrushes.WindowText, empty3, genericDefault)
+                e.Graphics.DrawString(
+                    Me._Title,
+                    font4,
+                    SystemBrushes.WindowText,
+                    empty2,
+                    genericDefault)
+
+                e.Graphics.DrawString(
+                    Me._Description,
+                    font3,
+                    SystemBrushes.WindowText,
+                    empty3,
+                    genericDefault)
 
                 Exit Select
 
@@ -197,25 +219,39 @@ Public Class WizardPage : Inherits Panel
                 empty2.Location = New Point(172, 8)
                 empty2.Width = Me.Width - empty2.Left - 8
 
-                Dim num As Integer = CInt(Math.Ceiling(e.Graphics.MeasureString(Me._Title, font2, empty2.Width, genericDefault).Height))
+                Dim num As Integer = CInt(
+                    Math.Ceiling(
+                    e.Graphics.MeasureString(
+                    Me._Title,
+                    font2,
+                    empty2.Width,
+                    genericDefault).Height))
 
                 empty3.Location = empty2.Location
                 empty3.Y += num + 8
-                empty3.Size = New Size(Me.Width - empty3.Left - 8, Me.Height - empty3.Y)
+                empty3.Size = New Size(
+                    Me.Width - empty3.Left - 8,
+                    Me.Height - empty3.Y)
 
-                e.Graphics.DrawString(Me._Title, font2, SystemBrushes.WindowText, empty2, genericDefault)
-                e.Graphics.DrawString(Me._Description, font, SystemBrushes.WindowText, empty3, genericDefault)
+                e.Graphics.DrawString(
+                    Me._Title,
+                    font2,
+                    SystemBrushes.WindowText,
+                    empty2,
+                    genericDefault)
+
+                e.Graphics.DrawString(
+                    Me._Description,
+                    font,
+                    SystemBrushes.WindowText,
+                    empty3,
+                    genericDefault)
 
                 Exit Select
 
         End Select
 
     End Sub
-
-    'Private Sub InitializeComponent()
-    '    Me.SuspendLayout()
-    '    Me.ResumeLayout(False)
-    'End Sub
 
 End Class
 
@@ -237,12 +273,6 @@ Public Class PageFinish : Inherits WizardPage
         End Set
     End Property
 
-    'Private Sub InitializeComponent()
-    '    Me.SuspendLayout()
-    '    Me.BackColor = SystemColors.ControlDarkDark
-    '    Me.ResumeLayout(False)
-    'End Sub
-
 End Class
 
 ''' <summary>Definiert eine Benutzerdefinierte Seite</summary>
@@ -262,12 +292,6 @@ Public Class PageCustom : Inherits WizardPage
             Me._Style = value
         End Set
     End Property
-
-    'Private Sub InitializeComponent()
-    '    Me.SuspendLayout()
-    '    Me.BackColor = SystemColors.ControlDarkDark
-    '    Me.ResumeLayout(False)
-    'End Sub
 
 End Class
 
@@ -289,12 +313,6 @@ Public Class PageStandard : Inherits WizardPage
         End Set
     End Property
 
-    'Private Sub InitializeComponent()
-    '    Me.SuspendLayout()
-    '    Me.BackColor = SystemColors.ControlDarkDark
-    '    Me.ResumeLayout(False)
-    'End Sub
-
 End Class
 
 ''' <summary>Definiert die Willkommenseite</summary>
@@ -314,12 +332,6 @@ Public Class PageWelcome : Inherits WizardPage
             Me._Style = value
         End Set
     End Property
-
-    'Private Sub InitializeComponent()
-    '    Me.SuspendLayout()
-    '    Me.BackColor = SystemColors.ControlDarkDark
-    '    Me.ResumeLayout(False)
-    'End Sub
 
 End Class
 
