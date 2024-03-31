@@ -9,10 +9,10 @@ Imports System.Drawing
 Module VariableDefinitions
 
     ''' <summary>speichert das Bild für den Headerbereich</summary>
-    Friend _ImageHeader As Image = My.Resources.HeaderImage
+    Friend _ImageHeader As Image
 
     ''' <summary>speichert das Bild für den linken Bereich der Willkommens und der Abschlußseite</summary>
-    Friend _ImageWelcome As Image = My.Resources.WelcomeImage
+    Friend _ImageWelcome As Image
 
     ''' <summary>speichert die Schriftart für die Beschreibung der Willkommens und Abschlußseite</summary>
     Friend _WelcomeFont As Font = Nothing
@@ -34,9 +34,7 @@ Module VariableDefinitions
 
 
     Friend ReadOnly _OffsetCancel As New Point(84, 36)
-
     Friend ReadOnly _OffsetNext As New Point(164, 36)
-
     Friend ReadOnly _OffsetBack As New Point(244, 36)
 
 End Module

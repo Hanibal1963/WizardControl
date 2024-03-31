@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="WizardControl.31593b22-e12e-4997-8b2c-26e22a5a0b93" Version="1.2024.0324.01" Language="de-DE" Publisher="Andreas Sauer" />
+        <Identity Id="WizardControl.31593b22-e12e-4997-8b2c-26e22a5a0b93" Version="1.2024.3103.00" Language="de-DE" Publisher="Andreas Sauer" />
         <DisplayName>WizardControl</DisplayName>
         <Description xml:space="preserve">Ein Steuerelement zum erstellen eines Assistenten.</Description>
+        <MoreInfo>https://github.com/Hanibal1963/WizardControl</MoreInfo>
         <License>LICENSE.txt</License>
         <Icon>Papa Schlumpf 08.jpg</Icon>
     </Metadata>

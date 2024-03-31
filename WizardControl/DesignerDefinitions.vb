@@ -9,9 +9,7 @@ Imports System.Windows.Forms
 Imports System.Windows.Forms.Design
 
 ''' <summary>Designer für die Seiten des Controls</summary>
-Friend Class PageDesigner
-
-    Inherits ParentControlDesigner
+Friend Class PageDesigner : Inherits ParentControlDesigner
 
     Public Overrides ReadOnly Property SelectionRules As SelectionRules
         Get
@@ -22,9 +20,7 @@ Friend Class PageDesigner
 End Class
 
 ''' <summary>Designer für dieses Control</summary>
-Friend Class WizardDesigner
-
-    Inherits ParentControlDesigner
+Friend Class WizardDesigner : Inherits ParentControlDesigner
 
     Protected Overrides Property DrawGrid As Boolean
         Get

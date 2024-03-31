@@ -6,6 +6,7 @@
 
 Imports System
 
+''' <summary>Enthält die Indexwerte der Seiten bevor die Seiten gewechselt werden.</summary>
 Public Class BeforeSwitchPagesEventArgs : Inherits AfterSwitchPagesEventArgs
 
     Private _Cancel As Boolean = False
@@ -19,6 +20,7 @@ Public Class BeforeSwitchPagesEventArgs : Inherits AfterSwitchPagesEventArgs
         End Set
     End Property
 
+    ''' <summary>Index der neuen Seite</summary>
     Public Overloads Property NewIndex As Integer
         Get
             Return Me._NewIndex
@@ -34,18 +36,20 @@ Public Class BeforeSwitchPagesEventArgs : Inherits AfterSwitchPagesEventArgs
 
 End Class
 
+''' <summary>Enthält die Indexwerte der Seiten nachdem die Seiten gewechselt wurden.</summary>
 Public Class AfterSwitchPagesEventArgs : Inherits EventArgs
 
     Protected _NewIndex As Integer
     Private ReadOnly _OldIndex As Integer
 
-
+    ''' <summary>Index der alten Seite</summary>
     Public ReadOnly Property OldIndex As Integer
         Get
             Return Me._OldIndex
         End Get
     End Property
 
+    ''' <summary>Index der neuen Seite</summary>
     Public ReadOnly Property NewIndex As Integer
         Get
             Return Me._NewIndex

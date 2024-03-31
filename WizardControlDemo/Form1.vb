@@ -26,7 +26,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Wizard1_AfterSwitchPages(sender As Object, e As AfterSwitchPagesEventArgs) Handles _
+    Private Sub Wizard1_AfterSwitchPages(sender As Object, e As WizardControl.AfterSwitchPagesEventArgs) Handles _
         Wizard1.AfterSwitchPages
 
         Dim unused = MessageBox.Show(
@@ -37,7 +37,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Wizard1_BeforeSwitchPages(sender As Object, e As BeforeSwitchPagesEventArgs) Handles _
+    Private Sub Wizard1_BeforeSwitchPages(sender As Object, e As WizardControl.BeforeSwitchPagesEventArgs) Handles _
         Wizard1.BeforeSwitchPages
 
         Dim unused = MessageBox.Show(

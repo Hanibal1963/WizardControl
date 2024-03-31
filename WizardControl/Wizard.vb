@@ -23,28 +23,28 @@ Public Class Wizard : Inherits UserControl
     Public Delegate Sub BeforeSwitchPagesEventHandler(sender As Object, e As BeforeSwitchPagesEventArgs)
     Public Delegate Sub AfterSwitchPagesEventHandler(sender As Object, e As AfterSwitchPagesEventArgs)
 
-    <Category("Wizard")>
+    <Category("Behavior")>
     <Description("Tritt auf, bevor die Seiten des Assistenten gewechselt werden, um dem Benutzer die Möglichkeit zur Validierung zu geben.")>
     Public Event BeforeSwitchPages As BeforeSwitchPagesEventHandler
 
-    <Category("Wizard")>
+    <Category("Behavior")>
     <Description("Tritt auf, nachdem die Seiten des Assistenten gewechselt wurden, und gibt dem Benutzer die Möglichkeit, die neue Seite einzurichten.")>
     Public Event AfterSwitchPages As AfterSwitchPagesEventHandler
 
-    <Category("Wizard")>
-    <Description("Tritt ein, wenn der Assistent abgebrochen wird, und gibt dem Benutzer die Möglichkeit zur Validierung.")>
+    <Category("Behavior")>
+    <Description("c")>
     Public Event Cancel As CancelEventHandler
 
-    <Category("Wizard")>
+    <Category("Behavior")>
     <Description("Tritt auf, wenn der Assistent abgeschlossen ist, und gibt dem Benutzer die Möglichkeit, zusätzliche Aufgaben zu erledigen.")>
     Public Event Finish As EventHandler
 
-    <Category("Wizard")>
+    <Category("Behavior")>
     <Description("Tritt auf, wenn der Benutzer auf die Hilfeschaltfläche klickt.")>
     Public Event Help As EventHandler
 
     <Browsable(True)>
-    <Category("Wizard")>
+    <Category("Design ")>
     <Description("Ruft die Sichtbarkeit Status der Hilfeschaltfläche ab oder legt diesen fest.")>
     <DefaultValue(True)>
     Public Property VisibleHelp As Boolean
@@ -69,7 +69,7 @@ Public Class Wizard : Inherits UserControl
     End Property
 
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Content)>
-    <Category("Wizard")>
+    <Category("Design ")>
     <Description("Ruft die Auflistung der Assistentenseiten in diesem Registerkartensteuerelement ab.")>
     <Editor(GetType(PagesCollectionEditor), GetType(UITypeEditor))>
     Public ReadOnly Property Pages As PagesCollection
@@ -79,7 +79,7 @@ Public Class Wizard : Inherits UserControl
     End Property
 
     <Browsable(True)>
-    <Category("Wizard")>
+    <Category("Design ")>
     <Description("Ruft das in der Kopfzeile der Standardseiten angezeigte Bild ab oder legt dieses fest.")>
     Public Property ImageHeader As Image
         Get
@@ -94,7 +94,7 @@ Public Class Wizard : Inherits UserControl
     End Property
 
     <Browsable(True)>
-    <Category("Wizard")>
+    <Category("Design ")>
     <Description("Ruft das auf den Begrüßungs- und Abschlussseiten angezeigte Bild ab oder legt es fest.")>
     Public Property ImageWelcome As Image
         Get
@@ -286,9 +286,18 @@ Public Class Wizard : Inherits UserControl
     Public Sub New()
 
         Me.InitializeComponent()
+        Me.InitializeVariables
         Me.InitializeStyles()
         MyBase.Dock = DockStyle.Fill
         _Pages = New PagesCollection(Me)
+
+    End Sub
+
+    Private Sub InitializeVariables()
+
+        _ImageHeader = My.Resources.HeaderImage
+        _ImageWelcome = My.Resources.WelcomeImage
+
 
     End Sub
 
@@ -301,47 +310,43 @@ Public Class Wizard : Inherits UserControl
 
     End Sub
 
-    'Protected Function ShouldSerializeHeaderFont() As Boolean
-    '    Return _HeaderFont IsNot Nothing
-    'End Function
-
-    'Protected Function ShouldSerializeHeaderTitleFont() As Boolean
-    '    Return _HeaderTitleFont IsNot Nothing
-    'End Function
-
-    'Protected Function ShouldSerializeWelcomeFont() As Boolean
-    '    Return _WelcomeFont IsNot Nothing
-    'End Function
-
-    'Protected Function ShouldSerializeWelcomeTitleFont() As Boolean
-    '    Return _WelcomeTitleFont IsNot Nothing
-    'End Function
-
+    ''' <summary>Entspricht einem Klick auf die Schaltfläche "weiter".</summary>
     Public Sub [Next]()
+
         If Me.SelectedIndex = _Pages.Count - 1 Then
+
             Me.ButtonNext.Enabled = False
+
         Else
+
             Me.OnBeforeSwitchPages(
                 New BeforeSwitchPagesEventArgs(
                 Me.SelectedIndex,
                 Me.SelectedIndex + 1))
+
         End If
 
     End Sub
 
+    ''' <summary>Entspricht einem Klick auf die Schaltfläche "zurück".</summary>
     Public Sub Back()
 
         If Me.SelectedIndex = 0 Then
+
             Me.ButtonBack.Enabled = False
+
         Else
+
             Me.OnBeforeSwitchPages(
                 New BeforeSwitchPagesEventArgs(
                 Me.SelectedIndex,
                 Me.SelectedIndex - 1))
+
         End If
 
     End Sub
 
+    ''' <summary>Setzt den Index der aktuellen Seite</summary>
     Private Sub ActivatePage(index As Integer)
 
         If index >= 0 AndAlso index < _Pages.Count Then
@@ -351,6 +356,7 @@ Public Class Wizard : Inherits UserControl
 
     End Sub
 
+    ''' <summary>setzt eine Wizardseite als aktuelle Seite </summary>
     Private Sub ActivatePage(page As WizardPage)
 
         If Not _Pages.Contains(page) Then
@@ -411,6 +417,7 @@ Public Class Wizard : Inherits UserControl
     End Sub
 
     Private Sub FocusFirstTabIndex(container As Control)
+
         Dim control As Control = Nothing
 
         For Each control2 As Control In container.Controls
@@ -441,30 +448,40 @@ Public Class Wizard : Inherits UserControl
     End Sub
 
     Protected Overridable Sub OnAfterSwitchPages(e As AfterSwitchPagesEventArgs)
+
         RaiseEvent AfterSwitchPages(Me, e)
+
     End Sub
 
     Protected Overridable Sub OnCancel(e As CancelEventArgs)
+
         RaiseEvent Cancel(Me, e)
+
         If e.Cancel Then
             Me.ParentForm.DialogResult = DialogResult.None
         Else
             Me.ParentForm.Close()
         End If
+
     End Sub
 
     Protected Overridable Sub OnFinish(e As EventArgs)
+
         RaiseEvent Finish(Me, e)
         Me.ParentForm.Close()
+
     End Sub
 
     Protected Overridable Sub OnHelp(e As EventArgs)
+
         RaiseEvent Help(Me, e)
+
     End Sub
 
     Protected Overrides Sub OnLoad(e As EventArgs)
 
         MyBase.OnLoad(e)
+
         If _Pages.Count > 0 Then
             Me.ActivatePage(0)
         End If
@@ -474,13 +491,16 @@ Public Class Wizard : Inherits UserControl
     Protected Overrides Sub OnResize(e As EventArgs)
 
         MyBase.OnResize(e)
+
         If _SelectedPage IsNot Nothing Then
             _SelectedPage.SetBounds(0, 0, Me.Width, Me.Height - 48)
         End If
+
         Me.ButtonHelp.Location = New Point(Me.ButtonHelp.Location.X, Me.Height - _OffsetBack.Y)
         Me.ButtonBack.Location = New Point(Me.Width - _OffsetBack.X, Me.Height - _OffsetBack.Y)
         Me.ButtonNext.Location = New Point(Me.Width - _OffsetNext.X, Me.Height - _OffsetNext.Y)
         Me.ButtonCancel.Location = New Point(Me.Width - _OffsetCancel.X, Me.Height - _OffsetCancel.Y)
+
         MyBase.Refresh()
 
     End Sub
@@ -488,9 +508,11 @@ Public Class Wizard : Inherits UserControl
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
 
         MyBase.OnPaint(e)
+
         Dim clientRectangle = MyBase.ClientRectangle
         clientRectangle.Y = Me.Height - 48
         clientRectangle.Height = 48
+
         ControlPaint.DrawBorder3D(
             e.Graphics,
             clientRectangle,
@@ -502,11 +524,15 @@ Public Class Wizard : Inherits UserControl
     Protected Overrides Sub OnControlAdded(e As ControlEventArgs)
 
         If Not (TypeOf e.Control Is WizardPage) AndAlso e.Control IsNot Me.ButtonCancel AndAlso e.Control IsNot Me.ButtonNext AndAlso e.Control IsNot Me.ButtonBack Then
+
             If _SelectedPage IsNot Nothing Then
                 _SelectedPage.Controls.Add(e.Control)
             End If
+
         Else
+
             MyBase.OnControlAdded(e)
+
         End If
 
     End Sub
@@ -521,10 +547,15 @@ Public Class Wizard : Inherits UserControl
             Case sender Is Me.ButtonBack : Me.Back()
             Case sender Is Me.ButtonHelp : Me.OnHelp(EventArgs.Empty)
             Case sender Is Me.ButtonCancel
+
                 If Me.ButtonCancel.DialogResult = DialogResult.Cancel Then
+
                     Me.OnCancel(New CancelEventArgs())
+
                 ElseIf Me.ButtonCancel.DialogResult = DialogResult.OK Then
+
                     Me.OnFinish(EventArgs.Empty)
+
                 End If
 
         End Select

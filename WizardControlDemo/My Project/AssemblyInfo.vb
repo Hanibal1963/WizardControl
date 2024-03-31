@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 ' Werte der Assemblyattribute überprüfen
 
 <Assembly: AssemblyTitle("WizardControlDemo")>
-<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyDescription("Demoprogramm für WizardControl")>
 <Assembly: AssemblyCompany("Andreas Sauer")>
 <Assembly: AssemblyProduct("WizardControlDemo")>
 <Assembly: AssemblyCopyright("Copyright © Andreas Sauer 2024")>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' indem Sie "*" wie unten gezeigt eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("1.2024.3103.00")>
+<Assembly: AssemblyFileVersion("1.2024.3103.00")>
